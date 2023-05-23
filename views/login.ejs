@@ -1,0 +1,73 @@
+<%- include('partials/header'); -%>
+
+<div class="center-body">
+    <div class="form-cont">
+        <form>
+            <h2>Login</h2>
+            <label for="email">Email</label>
+            <input type="text" name="email" required>
+            <div class="email error"></div>
+            <label for="email">Password</label>
+            <input type="password" name="password" required>
+            <div class="password error"></div>
+            <button>Login</button>
+            <a href="/signup">Don't have an account?</a>
+        </form>
+    </div>
+</div>
+
+<div class="bottom-body">
+
+</div>
+</div>
+
+
+
+<script>
+    const form = document.querySelector("form");
+    const emailError = document.querySelector(".email.error");
+    const passwordError = document.querySelector(".password.error");
+
+    form.addEventListener("submit", async (e) => {
+      //  e.preventDefault();
+//
+      //  //get values of email and pass
+      //  const email = form.email.value
+      //  const password = form.password.value //these are the name="", values
+      //  console.log(email, password);
+
+      e.preventDefault();
+
+//reset errors
+emailError.textContent = "";
+passwordError.textContent = "";
+
+//get values of email and pass
+const email = form.email.value
+const password = form.password.value //these are the name="", values
+//console.log(email, password);
+
+try {
+    const result = await fetch("/login", {//endpoint we want to request to, options object
+        method: "POST", //we want to look for post request
+        body: JSON.stringify({ email: email, password: password}),  //the email and password the user is trying to sign up with
+        headers: { "Content-Type": "application/json" }
+    });
+    const data = await result.json(); //getting the data out of result
+    console.log(data);
+    if(data.errors){ //if errors exists, do something
+        emailError.textContent = data.errors.email;
+        passwordError.textContent = data.errors.password;
+    }
+    if (data.user){ //if user data has been posted
+        location.assign(`/home/${email}`); //send them to homepage
+    }
+}
+catch(err){
+    console.log(err);
+}
+    })
+</script>
+
+
+<%- include('partials/footer'); -%>

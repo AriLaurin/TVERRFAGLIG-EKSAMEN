@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinpokomons</title>
+  <link rel="stylesheet" href="/CSS/style.css">
+
+  <!--FONTS-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Roboto:wght@100&family=Sedgwick+Ave+Display&family=Source+Code+Pro:ital,wght@1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Quicksand:wght@300;600&family=Roboto:wght@100&family=Sedgwick+Ave+Display&display=swap" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <div class="container">
+    <div class="top-body">
+      <div class="header-bar">
+        <% if (user){ %>
+          <img src="/IMG/logo.png" alt="Website Logo of A Chinpokomon">
+          <% if (user){ %>
+            <a href="/">
+              <h1>Chinpokomon - <%= user.email %></h1>
+            </a>
+            <% } else { %>
+              <a href="/">
+                <h1>Chinpokomon</h1>
+              </a>
+            <% } %>
+
+  
+          <a href="/logout">log out</a>
+          <% } else { %>
+            <img src="/IMG/logo.png" alt="Website Logo of A Chinpokomon">
+            <a href="/">
+              <h1>Chinpokomon</h1>
+            </a>
+    
+            <a href="/login">log in</a>
+          <% } %>
+
+      </div>
+                                                                        
+    </div>

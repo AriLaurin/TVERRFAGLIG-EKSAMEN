@@ -1,0 +1,42 @@
+<%- include('partials/header'); -%>
+
+
+    <div class="center-body">
+
+        <div class="all-pokomons">
+
+            <%if(pokos.length > 0){%>
+                <h1 id="user-pokos">Chinpokos by <%=pokos[0].author%></h1>
+                <%pokos.forEach(pokomons => {%>
+
+                    <div class="pokomon-cont">
+                        <div class="pokomon-image">
+                            <img src="data:<%= pokomons.image.contentType %>;base64,<%= pokomons.image.data.toString('base64') %>" alt="A picture of a chinpokomon">
+                        </div>
+                        <div class="pokomon-content">
+                            <h1><%=pokomons.name%></h1>
+                            <h2>Abilities:</h2>
+                            <p>1 - <%=pokomons.ability1%></p>
+                            <p>2 - <%=pokomons.ability2%></p>
+                            <p>3 - <%=pokomons.ability3%></p>
+                            <p class="author-para"><%=pokomons.author%></p>
+                        </div>
+        
+                    </div>
+      
+                <%})%>
+              <%}else{%>
+                <div class="error-display">
+                    <p id="no-display">THIS USER HAS NO POKOMONS TO DISPLAY</p>
+                </div>
+              <%}%>
+
+        </div>
+
+    </div>
+    <div class="bottom-body">
+
+    </div>
+  </div>
+
+<%- include('partials/footer'); -%>

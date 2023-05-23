@@ -1,0 +1,202 @@
+h1, h2, h3, p, a ,label, li, footer {
+    font-family: Quicksand;
+    color:#363732;
+}
+
+body{
+    background-color: #3A2D32;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+.container {
+    display: grid; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "top-body top-body top-body"
+      "center-body center-body center-body"
+      "bottom-body bottom-body bottom-body"; 
+  }
+  .top-body {
+     grid-area: top-body;
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+     grid-gap: 20px;
+     }
+  .center-body {
+     grid-area: center-body;
+     }
+  .bottom-body {
+     grid-area: bottom-body;
+     }
+
+     .header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #A2AD91;
+        padding: 10px;
+        box-shadow: 5px 5px 5px #000000;
+      }
+
+      .header-bar img {
+        height: 5em;
+      }
+
+      .header-bar h1 {
+        font-size: 1em;
+      }
+
+      .header-bar a{
+        font-size: 2em;
+      }
+
+      .all-pokomons{
+        padding: 2px 16px;
+      }
+
+      .pokomon-cont{
+        display: grid;
+        background-color: #A2AD91;
+        grid-template-columns: 1fr 1fr;
+        max-width: 45em;
+        align-items: center;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+      }
+
+      .pokomon-cont:hover{
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);
+        font-size: 1.2em;
+        cursor: pointer;
+      }
+
+      .pokomon-image {
+        max-width: 20em;
+        display: flex;
+        justify-content: center;
+      }
+
+      .pokomon-image > img {
+        max-height: 10em;
+      }
+
+      .pokomon-content {
+        text-align: left;
+      }
+
+      .author-para{
+        padding-right: 1em;
+        text-align: right;
+        font-family: 'Dancing Script', cursive;
+        font-size: 1.5em;
+      }
+
+      .form-title {
+        font-size: 2rem;
+        margin: 20px 0;
+        text-align: center;
+      }
+      
+      .form-cont {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 20px;
+        background-color: #A2AD91;
+        max-width: 45em;
+        margin: 20px auto;
+        padding: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+      }
+      
+      .form-cont:hover{
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+      }
+      
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+      }
+      
+      input {
+        display: block;
+        width: 100%;
+        padding: 0.5em;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-bottom: 1em;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+      }
+      
+      input[type="text"]:hover,
+      input[type="text"]:focus {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      }
+      
+      input[type="hidden"] {
+        display: none;
+      }
+      
+      button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+      }
+      
+      button:hover {
+        background-color: #3e8e41;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        cursor: pointer;
+      }
+
+      #user-pokos{
+        text-align: center;
+        color: #A2AD91;
+      }
+
+      #no-display{
+        text-align: center;
+        color: #A2AD91;
+        font-size: 2em;
+      }
+
+      .delete{
+        display: flex;
+        margin-left: auto;
+        margin-right: 1.5em;
+        background-color: red;
+      }
+
+      .delete:hover{
+        background-color: darkred;
+      }
+
+      #update-form {
+        display: none;
+        margin-top: 20px;
+        margin-left: 10px;
+        background-color: #016FB9;
+      }
+
+      #update-form:hover{
+        background-color: #00558d;
+      }
