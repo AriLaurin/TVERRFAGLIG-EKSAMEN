@@ -17,7 +17,6 @@ router.post("/login", Controller.login_post);
 router.get("/logout", Controller.logout_get);
 
 
-
 router.get("/home/:user", requireAuth, Controller.account_get);
 router.get("/:user", requireAuth, Controller.user_get);
 
