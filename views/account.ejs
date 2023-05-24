@@ -3,48 +3,41 @@
 
     <div class="center-body">
         <%console.log(user)%>
-        <div class="all-pokomons">
-            <%if(URLuser === user.email){%>
-                    <div class="form-cont">
-                        <h1 class="form-title">CREATE A CHINPOKOMON</h1>
-                      <form method="POST" enctype="multipart/form-data">
-                        <label for="NAME">NAME</label>
-                        <input type="text" name="NAME">
-                        <label for="ABILITY1">ABILITY1</label>
-                        <input type="text" name="ABILITY1">
-                        <label for="ABILITY2">ABILITY2</label>
-                        <input type="text" name="ABILITY2">
-                        <label for="ABILITY3">ABILITY3</label>
-                        <input type="text" name="ABILITY3">
-                        <label for="IMAGE">IMAGE</label>
-                        <input type="file" id="image" name="IMAGE" accept="image/*" maxlength="5000000">
-                        <input type="hidden" name="AUTHOR" data-doc="<%=user.email%>">
-                        <input type="hidden" name="UPDATEID" value="">
-                        <button id="formsubmit" type="button">Create Chinpokomon</button>
-                        <button id="update-form" type="button" onclick="updateForm()">Update Chinpokomon</button>
-                    </form>
-                    </div>
-    
-                    <%pokos.forEach(pokomons => {%>
-    
-                        <div class="pokomon-cont" onclick="fillForm('<%=pokomons.name%>', '<%=pokomons.ability1%>', '<%=pokomons.ability2%>', '<%=pokomons.ability3%>', '<%=pokomons.author%>', '<%=pokomons._id%>')">
-                            <div class="pokomon-image">
-                                    <img src="data:<%= pokomons.image.contentType %>;base64,<%= pokomons.image.data.toString('base64') %>" alt="A picture of a chinpokomon">
-                              </div>
-                            <div class="pokomon-content">
-                                <button class ="delete" data-doc="<%=pokomons._id%>" onclick="deleteTRASH('<%=pokomons._id%>')">DELETE</button>
-                                <h1><%=pokomons.name%></h1>
+        <%if(URLuser === user.email){%>
+            <div class="form-cont">
+                <h1 class="form-title">MAKE A WISH</h1>
+              <form>
+                <label for="NAME">ADD YOUR WISH</label>
+                <input type="text" name="NAME">
+                <!-- <label for="ABILITY1">ABILITY1</label>
+                <input type="text" name="ABILITY1">
+                <label for="ABILITY2">ABILITY2</label>
+                <input type="text" name="ABILITY2">
+                <label for="ABILITY3">ABILITY3</label>
+                <input type="text" name="ABILITY3">
+                <label for="IMAGE">IMAGE</label> -->
+                <!-- <input type="file" id="image" name="IMAGE" accept="image/*" maxlength="5000000"> -->
+                <input type="hidden" name="AUTHOR" data-doc="<%=user.email%>">
+                <input type="hidden" name="UPDATEID" value="">
+                <button id="formsubmit" type="button">Make a Wish</button>
+                <button id="update-form" type="button" onclick="updateForm()">Update Wish</button>
+            </form>
+            </div>
 
-                                <h2>Abilities:</h2>
-                                <p>1 - <%=pokomons.ability1%></p>
-                                <p>2 - <%=pokomons.ability2%></p>
-                                <p>3 - <%=pokomons.ability3%></p>
-                                <p class="author-para"><%=pokomons.author%></p>
+        <div class="all-Wishes">
+            <%let counter = 1;%>
+                    <%wishes.forEach((Wishes) => {%>
+    
+                        <div class="Wish-cont" onclick="fillForm('<%=Wishes.yourWish%>', '<%=Wishes.author%>', '<%=Wishes._id%>')">
+                            <div class="Wish-content">
+                                <button class ="delete" data-doc="<%=Wishes._id%>" onclick="deleteTRASH('<%=Wishes._id%>')">DELETE</button>
+                                <h1><%= counter %>. <%=Wishes.yourWish%></h1>
+                                <p class="author-para"><%=Wishes.author%></p>
 
                             </div>
             
                         </div>
-          
+                        <%counter++;%>
                     <%})%>
             <%}else{%>
                 <div class="error-display">

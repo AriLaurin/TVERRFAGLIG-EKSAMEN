@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chinpokomons</title>
+  <title>Wishlist</title>
   <link rel="stylesheet" href="/CSS/style.css">
 
   <!--FONTS-->
@@ -18,26 +18,32 @@
     <div class="top-body">
       <div class="header-bar">
         <% if (user){ %>
-          <img src="/IMG/logo.png" alt="Website Logo of A Chinpokomon">
+          <a href="/">
+            <img src="/IMG/Wish_logo.png" id="header-img" alt="Website Logo of A Wishlist">
+          </a>
           <% if (user){ %>
-            <a href="/">
-              <h1>Chinpokomon - <%= user.email %></h1>
-            </a>
+              <h1>Wishlist - <%= user.email %></h1>
             <% } else { %>
               <a href="/">
-                <h1>Chinpokomon</h1>
+                <h1>Wishlist</h1>
               </a>
             <% } %>
 
-  
-          <a href="/logout">log out</a>
+            <div class="right-links">
+              <a href="/home/<%= user.email %>">Account</a>
+              <a href="/logout">log out</a>
+            </div>
+
+
           <% } else { %>
-            <img src="/IMG/logo.png" alt="Website Logo of A Chinpokomon">
             <a href="/">
-              <h1>Chinpokomon</h1>
+              <img src="/IMG/Wish_logo.png" id="header-img" alt="Website Logo of A Wishlist">
             </a>
+              <h1>Wishlist</h1>
     
-            <a href="/login">log in</a>
+            <div class="right-links">
+              <a href="/login">login</a>
+            </div>
           <% } %>
 
       </div>

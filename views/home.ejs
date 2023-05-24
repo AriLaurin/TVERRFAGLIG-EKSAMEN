@@ -3,30 +3,25 @@
 
     <div class="center-body">
 
-        <div class="all-pokomons">
+        <div class="all-Wishes">
 
-            <%if(pokomon.length > 0){%>
-                <%pokomon.forEach(pokomons => {%>
-
-                    <div class="pokomon-cont">
-                        <div class="pokomon-image">
-                            <img src="data:<%= pokomons.image.contentType %>;base64,<%= pokomons.image.data.toString('base64') %>" alt="A picture of a chinpokomon">
-                        </div>
-                        <div class="pokomon-content">
-                            <h1><%=pokomons.name%></h1>
-                            <h2>Abilities:</h2>
-                            <p>1 - <%=pokomons.ability1%></p>
-                            <p>2 - <%=pokomons.ability2%></p>
-                            <p>3 - <%=pokomons.ability3%></p>
-                            <p class="author-para"><%=pokomons.author%></p>
-                        </div>
-        
-                    </div>
-      
-                <%})%>
-              <%}else{%>
-                <p>THERES NOTHING TO DISPLAY</p>
-              <%}%>
+            <% if (Wish.length > 0) {
+                // Sort the wishes by createdAt in descending order
+                Wish.sort((a, b) => new Date(b.document.createdAt) - new Date(a.document.createdAt));
+                Wish.forEach((Wishes) => { %>
+                  <div class="Wish-cont">
+                    <a href="/<%= Wishes.document.author %>">
+                      <div class="Wish-content">
+                        <h1><%= Wishes.document.yourWish %></h1>
+                        <p class="author-para"><%= Wishes.document.author %></p>
+                      </div>
+                    </a>
+                  </div>
+                <% });
+              } else { %>
+                <p>THERE'S NOTHING TO DISPLAY</p>
+              <% } %>
+              
 
         </div>
 

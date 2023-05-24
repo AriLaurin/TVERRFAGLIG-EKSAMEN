@@ -3,31 +3,25 @@
 
     <div class="center-body">
 
-        <div class="all-pokomons">
+        <div class="all-Wishes">
 
-            <%if(pokos.length > 0){%>
-                <h1 id="user-pokos">Chinpokos by <%=pokos[0].author%></h1>
-                <%pokos.forEach(pokomons => {%>
+            <%if(wishes.length > 0){%>
+                <%let counter = 1;%>
+                <h1 id="user-wishes">wishes by <%=wishes[0].author%></h1>
+                <%wishes.forEach(Wishes => {%>
 
-                    <div class="pokomon-cont">
-                        <div class="pokomon-image">
-                            <img src="data:<%= pokomons.image.contentType %>;base64,<%= pokomons.image.data.toString('base64') %>" alt="A picture of a chinpokomon">
-                        </div>
-                        <div class="pokomon-content">
-                            <h1><%=pokomons.name%></h1>
-                            <h2>Abilities:</h2>
-                            <p>1 - <%=pokomons.ability1%></p>
-                            <p>2 - <%=pokomons.ability2%></p>
-                            <p>3 - <%=pokomons.ability3%></p>
-                            <p class="author-para"><%=pokomons.author%></p>
+                    <div class="Wish-cont">
+                        <div class="Wish-content">
+                            <h1><%= counter %>. <%=Wishes.yourWish%></h1>
+                            <p class="author-para"><%=Wishes.author%></p>
                         </div>
         
                     </div>
-      
+                    <%counter++;%>
                 <%})%>
               <%}else{%>
                 <div class="error-display">
-                    <p id="no-display">THIS USER HAS NO POKOMONS TO DISPLAY</p>
+                    <p id="no-display">THIS USER HAS NO Wishes TO DISPLAY</p>
                 </div>
               <%}%>
 

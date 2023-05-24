@@ -1,4 +1,4 @@
-const Pokomon = require("../models/Pokomon");
+const Wish = require("../models/Wish");
 const User = require("../models/User");
 const Image = require("../models/Image");
 const jwt = require("jsonwebtoken");
@@ -49,9 +49,20 @@ const createToken = (id) => {
 }
 
 module.exports.home_get = async (req,res) => { //a function that renders our routes from AuthRoutes
-  await Pokomon.find().populate("image").sort({ createdAt: -1}).limit(10)
+  // .populate("image")
+  // await Wish.find().sort({ createdAt: -1}).limit(5)
+  await Wish.aggregate([
+    { $sort: { createdAt: -1 } }, // Sort by createdAt in ascending order
+      {
+        $group: {
+          _id: '$author', // Group by author field
+          document: { $first: '$$ROOT' } // Select the first document for each group
+        }
+      },
+      { $limit: 5 } // Limit the result to 5 documents (optional)
+  ])
   .then((result) => {
-      res.render('home', {title: 'All Pokomons', pokomon: result})
+      res.render('home', {title: 'All Wishes', Wish: result})
   })
   .catch((err) => {
     res.render("error");
@@ -71,20 +82,23 @@ module.exports.account_post = async (req, res) => {
         res.status(500).send("Error saving image");
       } else {
         // Everything went fine.
-        const { name, ability1, ability2, ability3, author } = req.body;
+        // const { name, ability1, ability2, ability3, author } = req.body;
+        const { yourWish, author } = req.body;
+        console.log(req.body);
   
-        const image = new Image({
-          name: req.file.originalname,
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-          key: name,
-        });
+        // const image = new Image({
+        //   name: req.file.originalname,
+        //   data: req.file.buffer,
+        //   contentType: req.file.mimetype,
+        //   key: name,
+        // });
   
         try {
-          await image.save();
-          const product = await Pokomon.create({ name, ability1, ability2, ability3, author, image });
+          // await image.save();
+          // const product = await Wish.create({ name, ability1, ability2, ability3, author, image });
+          product = await Wish.create({ yourWish, author });
           res.status(201);
-          console.log("Pokomon created:", product);
+          console.log("Wish created:", product);
           res.json(product);
         } catch (err) {
           console.log(err);
@@ -118,9 +132,10 @@ module.exports.signup_post = async(req,res) => { //a function that renders our r
 
 module.exports.account_get = async (req,res) => { 
   const URLuser = req.params.user; //req.params is what we write into the url & using :user in the route, we can grab what we wrote
-  await Pokomon.find({author: URLuser}).populate("image").sort({ createdAt: -1}).limit(10)
+  // await Wish.find({author: URLuser}).populate("image").sort({ createdAt: -1}).limit(10)
+  await Wish.find({author: URLuser}).sort({ createdAt: -1}).limit(10)
   .then((result) => {
-      res.render('account', {title: 'All Pokomons', pokos: result, URLuser})
+      res.render('account', {title: 'All Wishes', wishes: result, URLuser})
   })
   .catch((err) => {
     res.render("error");
@@ -158,9 +173,9 @@ module.exports.logout_get = (req,res) => {
 
 module.exports.user_get = async (req,res) => {
   const user = req.params.user; //req.params is what we write into the url & using :user in the route, we can grab what we wrote
-  await Pokomon.find({author: user}).sort({ createdAt: -1})
+  await Wish.find({author: user}).sort({ createdAt: -1})
   .then((result) => {
-      res.render('user', {title: 'All Pokos', pokos: result})
+      res.render('user', {title: 'All Wishes', wishes: result})
   })
   .catch((err) => {
     res.render("error", {title: "Pokos not found"});
@@ -168,9 +183,9 @@ module.exports.user_get = async (req,res) => {
 
 }
 
-module.exports.pokomon_delete = (req,res) => {
+module.exports.Wish_delete = (req,res) => {
   const ID = req.params.id;
-  Pokomon.findByIdAndDelete(ID)
+  Wish.findByIdAndDelete(ID)
   .then(result => {
     res.status(204).send();
   })
@@ -179,7 +194,7 @@ module.exports.pokomon_delete = (req,res) => {
   })
 }
 
-module.exports.pokomon_update = (req, res) => {
+module.exports.Wish_update = (req, res) => {
   upload(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
       console.log(err);
@@ -189,29 +204,31 @@ module.exports.pokomon_update = (req, res) => {
       res.status(500).send("Error saving image");
     } else {
       const ID = req.params.updateId;
-      const { name, ability1, ability2, ability3, author } = req.body;
-      let image = null;
-      if (req.file) {
-        // process the image if it exists
-        image = new Image({
-          name: req.file.originalname,
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-          key: name,
-        });
-      }
-      const update = { name, ability1, ability2, ability3, author };
-      if (image) {
-        update.image = image;
-      }
-      Pokomon.findByIdAndUpdate(ID, update)
+      // const { name, ability1, ability2, ability3, author } = req.body;
+      const { yourWish, author } = req.body;
+      // let image = null;
+      // if (req.file) {
+      //   // process the image if it exists
+      //   image = new Image({
+      //     name: req.file.originalname,
+      //     data: req.file.buffer,
+      //     contentType: req.file.mimetype,
+      //     key: name,
+      //   });
+      // }
+      // const update = { name, ability1, ability2, ability3, author };
+      const update = { yourWish, author };
+      // if (image) {
+      //   update.image = image;
+      // }
+      Wish.findByIdAndUpdate(ID, update)
         .then((result) => {
-          console.log('Updated Pokomon successfully');
+          console.log('Updated Wish successfully');
           res.status(204).send();
         })
         .catch((err) => {
           console.log(err);
-          res.status(500).send("Error updating pokomon");
+          res.status(500).send("Error updating Wish");
         });
     }
   });
