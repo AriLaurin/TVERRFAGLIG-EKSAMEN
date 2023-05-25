@@ -27,6 +27,9 @@ function moveWishUp(userId, currentIndex, counter) {
     .then((data) => {
       console.log('Wish moved up:', data);
     })
+    .then(() => {
+      location.reload();
+    })
     .catch((error) => {
       console.error('Error:', error);
     });
@@ -55,6 +58,9 @@ function moveWishDown(userId, currentIndex, counter) {
     .then((response) => response.json())
     .then((data) => {
       console.log('Wish moved down:', data);
+    })
+    .then(() => {
+      location.reload();
     })
     .catch((error) => {
       console.error('Error:', error);
