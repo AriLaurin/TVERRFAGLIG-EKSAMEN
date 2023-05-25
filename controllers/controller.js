@@ -4,8 +4,8 @@ const Image = require("../models/Image");
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage }).single('image');
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage }).single('image');
 
 //handle errors
 const handleErrors = (err) => {
@@ -71,32 +71,11 @@ module.exports.home_get = async (req,res) => { //a function that renders our rou
 }
 
 module.exports.account_post = async (req, res) => {
-    upload(req, res, async function (err) {
-      if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading.
-        console.log(err);
-        res.status(500).send("Error saving image");
-      } else if (err) {
-        // An unknown error occurred when uploading.
-        console.log(err);
-        res.status(500).send("Error saving image");
-      } else {
-        // Everything went fine.
-        // const { name, ability1, ability2, ability3, author } = req.body;
         const { yourWish, author } = req.body;
-        console.log(req.body);
-  
-        // const image = new Image({
-        //   name: req.file.originalname,
-        //   data: req.file.buffer,
-        //   contentType: req.file.mimetype,
-        //   key: name,
-        // });
   
         try {
-          // await image.save();
-          // const product = await Wish.create({ name, ability1, ability2, ability3, author, image });
-          product = await Wish.create({ yourWish, author });
+          const position = await Wish.countDocuments({ author }) + 1; // Get the count of existing wishes and increment by 1
+          product = await Wish.create({ yourWish, author, position });
           res.status(201);
           console.log("Wish created:", product);
           res.json(product);
@@ -104,8 +83,7 @@ module.exports.account_post = async (req, res) => {
           console.log(err);
           res.status(500).send("Error saving image");
         }
-      }
-    });
+    
   };
 
 module.exports.signup_get = (req,res) => { //a function that renders our routes from AuthRoutes
@@ -133,7 +111,7 @@ module.exports.signup_post = async(req,res) => { //a function that renders our r
 module.exports.account_get = async (req,res) => { 
   const URLuser = req.params.user; //req.params is what we write into the url & using :user in the route, we can grab what we wrote
   // await Wish.find({author: URLuser}).populate("image").sort({ createdAt: -1}).limit(10)
-  await Wish.find({author: URLuser}).sort({ createdAt: -1}).limit(10)
+  await Wish.find({author: URLuser})
   .then((result) => {
       res.render('account', {title: 'All Wishes', wishes: result, URLuser})
   })
@@ -195,14 +173,6 @@ module.exports.Wish_delete = (req,res) => {
 }
 
 module.exports.Wish_update = (req, res) => {
-  upload(req, res, async function (err) {
-    if (err instanceof multer.MulterError) {
-      console.log(err);
-      res.status(500).send("Error saving image");
-    } else if (err) {
-      console.log(err);
-      res.status(500).send("Error saving image");
-    } else {
       const ID = req.params.updateId;
       // const { name, ability1, ability2, ability3, author } = req.body;
       const { yourWish, author } = req.body;
@@ -230,9 +200,43 @@ module.exports.Wish_update = (req, res) => {
           console.log(err);
           res.status(500).send("Error updating Wish");
         });
-    }
-  });
 };
 
 
+// Move a wish up
+module.exports.moveWishUp = async (req, res) => {
+  const wishId = req.params.id;
 
+  try {
+    const wish = await Wish.findById(wishId);
+    console.log("1",  wish.createdAt);
+
+    if (!wish) {
+      return res.status(404).json({ error: 'Wish not found' });
+    }
+
+    const previousWish = await Wish.findOne({
+      author: wish.author,
+      _id: { $ne: wishId },
+      createdAt: { $lt: wish.createdAt },
+    }).sort({ createdAt: -1 });
+
+    if (previousWish) {
+      const tempCreatedAt = wish.createdAt;
+      console.log("prev wish", previousWish.createdAt);
+      wish.createdAt = previousWish.createdAt;
+      previousWish.createdAt = tempCreatedAt;
+      console.log("2", wish.createdAt);
+
+      await wish.save();
+      await previousWish.save();
+
+      return res.status(200).json({ message: 'Wish moved up successfully' });
+    }
+
+    return res.status(400).json({ error: 'Cannot move wish up' });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};

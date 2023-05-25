@@ -27,15 +27,14 @@
         <div class="all-Wishes">
             <%let counter = 1;%>
                     <%wishes.forEach((Wishes) => {%>
-    
                         <div class="Wish-cont" onclick="fillForm('<%=Wishes.yourWish%>', '<%=Wishes.author%>', '<%=Wishes._id%>')">
                             <div class="Wish-content">
                                 <button class ="delete" data-doc="<%=Wishes._id%>" onclick="deleteTRASH('<%=Wishes._id%>')">DELETE</button>
                                 <h1><%= counter %>. <%=Wishes.yourWish%></h1>
                                 <p class="author-para"><%=Wishes.author%></p>
-
+                                <button class="move-up" data-doc="<%= Wishes._id %>" onclick="moveWishUp('<%= Wishes._id %>')">Move Up</button>
+                                <button class="move-down" data-doc="<%= Wishes._id %>" onclick="moveWishDown('<%= Wishes._id %>')">Move Down</button>
                             </div>
-            
                         </div>
                         <%counter++;%>
                     <%})%>

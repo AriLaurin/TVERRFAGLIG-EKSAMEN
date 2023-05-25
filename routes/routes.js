@@ -24,4 +24,11 @@ router.post("/update/:updateId", Controller.Wish_update);
 
 router.delete("/home/:id", Controller.Wish_delete);
 
+// Move a wish up
+router.post('/wishes/:id/move-up', Controller.moveWishUp);
+
+// Move a wish down
+// router.post('/wishes/:id/move-down', Controller.moveWishDown);
+
+
 module.exports = router;

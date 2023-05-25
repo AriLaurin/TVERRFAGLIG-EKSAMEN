@@ -1,25 +1,41 @@
 const form = document.querySelector("form");
 const formButton = document.querySelector("#formsubmit");
 
+async function moveWishUp(wishId){
+
+  try {
+    //sender data som lager bruker
+    const res = await fetch(`/wishes/${wishId}/move-up`,{
+        method: 'post',
+        headers: {'Content-Type': 'application/json'}
+    })
+    const pokoData = await res.json();
+       
+    // console.log(pokoData);
+    location.reload();
+
+} catch (err) {
+    console.log(err)
+    const message = await err.text();
+    console.log('error message:', message);
+}
+}
+
 async function formPOST(){
-  const formData = new FormData();
+  // const formData = new FormData();
 
   //form image value
   // formData.append("image", form.IMAGE.files[0]);
 
   //form values
-  formData.append('yourWish', form.NAME.value);
+  // formData.append('yourWish', form.NAME.value);
   // formData.append('ability1', form.ABILITY1.value);
   // formData.append('ability2', form.ABILITY2.value);
   // formData.append('ability3', form.ABILITY3.value);
-  formData.append('author', form.AUTHOR.dataset.doc); 
-//   const NAME = form.NAME.value
-//   const A1 = form.ABILITY1.value
-//   const A2 = form.ABILITY2.value
-//   const A3 = form.ABILITY3.value
-//   const AUTHOR = form.AUTHOR.dataset.doc
-//   const IMG = form.IMAGE.value
-//   console.log(IMG);
+  // formData.append('author', form.AUTHOR.dataset.doc); 
+  const NAME = form.NAME.value
+  const AUTHOR = form.AUTHOR.dataset.doc
+
 
 
 
@@ -28,9 +44,9 @@ async function formPOST(){
     //sender data som lager bruker
     const res = await fetch('/account',{
         method: 'post',
-        body: formData,
-        // body: JSON.stringify({name: NAME, ability1: A1, ability2: A2, ability3: A3, author: AUTHOR, file: IMG}),
-        headers: {},
+        // body: formData,
+        body: JSON.stringify({yourWish: NAME, author: AUTHOR}),
+        headers: {'Content-Type': 'application/json'}
     })
     const pokoData = await res.json();
        
@@ -115,20 +131,21 @@ async function updateForm() {
   // formData.append("image", form.IMAGE.files[0]);
 
   //form values
-  formData.append('yourWish', nameField);
+  // formData.append('yourWish', nameField);
   // formData.append('ability1', ability1Field);
   // formData.append('ability2', ability2Field);
   // formData.append('ability3', ability3Field);
-  formData.append('author', authorField);
+  // formData.append('author', authorField);
 
   try {
     const res = await fetch(`/update/${updateId}`,{
         method: 'post',
-        body: formData,
-        headers: {}
+        body: JSON.stringify({yourWish: nameField, author: authorField}),
+        headers: {'Content-Type': 'application/json'}
     })
     location.reload();
 } catch (err) {
 console.log(err);
 }
 }
+
