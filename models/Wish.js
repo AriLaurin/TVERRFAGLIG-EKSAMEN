@@ -8,11 +8,6 @@ const WishModel = new mongoose.Schema({
     author: {
       type: String,
       required: true
-    },
-    position: {
-      type: Number,
-      required: false,
-      default: 0
     }
   }, {timestamps: true});
   

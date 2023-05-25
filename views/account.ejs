@@ -2,41 +2,35 @@
 
 
     <div class="center-body">
-        <%console.log(user)%>
         <%if(URLuser === user.email){%>
             <div class="form-cont">
                 <h1 class="form-title">MAKE A WISH</h1>
               <form>
                 <label for="NAME">ADD YOUR WISH</label>
                 <input type="text" name="NAME">
-                <!-- <label for="ABILITY1">ABILITY1</label>
-                <input type="text" name="ABILITY1">
-                <label for="ABILITY2">ABILITY2</label>
-                <input type="text" name="ABILITY2">
-                <label for="ABILITY3">ABILITY3</label>
-                <input type="text" name="ABILITY3">
-                <label for="IMAGE">IMAGE</label> -->
-                <!-- <input type="file" id="image" name="IMAGE" accept="image/*" maxlength="5000000"> -->
                 <input type="hidden" name="AUTHOR" data-doc="<%=user.email%>">
                 <input type="hidden" name="UPDATEID" value="">
                 <button id="formsubmit" type="button">Make a Wish</button>
-                <button id="update-form" type="button" onclick="updateForm()">Update Wish</button>
             </form>
             </div>
 
         <div class="all-Wishes">
             <%let counter = 1;%>
-                    <%wishes.forEach((Wishes) => {%>
-                        <div class="Wish-cont" onclick="fillForm('<%=Wishes.yourWish%>', '<%=Wishes.author%>', '<%=Wishes._id%>')">
-                            <div class="Wish-content">
-                                <button class ="delete" data-doc="<%=Wishes._id%>" onclick="deleteTRASH('<%=Wishes._id%>')">DELETE</button>
-                                <h1><%= counter %>. <%=Wishes.yourWish%></h1>
-                                <p class="author-para"><%=Wishes.author%></p>
-                                <button class="move-up" data-doc="<%= Wishes._id %>" onclick="moveWishUp('<%= Wishes._id %>')">Move Up</button>
-                                <button class="move-down" data-doc="<%= Wishes._id %>" onclick="moveWishDown('<%= Wishes._id %>')">Move Down</button>
+                    <%wishes.forEach((Wishes) => {%> <!--If -->
+                         <% Wishes.wishlist.forEach((Wish) => { %> <!--For each wish in array, make new container and display info-->
+                            <div class="Wish-cont" data-doc="<%= counter -1%>">
+                                <div class="Wish-content" data-doc="<%=Wishes._id%>" onclick="fillForm('<%=Wish%>', '<%= counter -1%>')">
+                                    <button class ="delete" data-doc="<%=Wishes._id%>" onclick="deleteTRASH('<%= counter -1%>', '<%=Wishes.email%>')">DELETE</button>
+                                    <h1><%= counter %>. <%=Wish%></h1>
+                                    <input type="text" name="NAME" class="updateStyle" id="updateInput<%= counter -1%>">
+                                    <button id="update-form<%= counter -1%>" class="updateStyle" type="button" onclick="updateForm('<%= counter -1%>', '<%=Wishes.email%>')">Update Wish</button>
+                                    <p class="author-para"><%=Wishes.email%></p>
+                                    <button class="move-up" data-doc="<%= Wishes._id %>" onclick="moveWishUp('<%= Wishes._id %>')">Move Up</button>
+                                    <button class="move-down" data-doc="<%= Wishes._id %>" onclick="moveWishDown('<%= Wishes._id %>')">Move Down</button>
+                                </div>
                             </div>
-                        </div>
-                        <%counter++;%>
+                            <%counter++;%>
+                                <%})%>
                     <%})%>
             <%}else{%>
                 <div class="error-display">

@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({//object defines the structure of our us
         required: [true, "Password is required"],
         minlength: [6, "Minimum password length is 6 characters"]
     },
+
+    wishlist:{
+        type: Array
+    }
 });
 
 //fire a function after doc saved to db

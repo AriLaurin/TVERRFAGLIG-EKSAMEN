@@ -22,17 +22,6 @@ async function moveWishUp(wishId){
 }
 
 async function formPOST(){
-  // const formData = new FormData();
-
-  //form image value
-  // formData.append("image", form.IMAGE.files[0]);
-
-  //form values
-  // formData.append('yourWish', form.NAME.value);
-  // formData.append('ability1', form.ABILITY1.value);
-  // formData.append('ability2', form.ABILITY2.value);
-  // formData.append('ability3', form.ABILITY3.value);
-  // formData.append('author', form.AUTHOR.dataset.doc); 
   const NAME = form.NAME.value
   const AUTHOR = form.AUTHOR.dataset.doc
 
@@ -79,11 +68,13 @@ formButton.addEventListener("click", async (e) => {
 
 })
 
-function deleteTRASH(id) {
-  const endpoint = `/home/${id}`;
+function deleteTRASH(arrayNr, author) {
+  const endpoint = `/home/${arrayNr}`;
   console.log(endpoint);
   fetch(endpoint, {
     method: "DELETE",
+    body: JSON.stringify({author: author}),
+    headers: {'Content-Type': 'application/json'}
   })
   .then(() => {
     location.reload();
@@ -92,55 +83,38 @@ function deleteTRASH(id) {
   .catch(err => console.log(err));
 }
 
-// function fillForm(name, ability1, ability2, ability3, author, id) {
-  function fillForm(name, author, id) {
+  function fillForm(name, id) {
+    // console.log(name, author, id);
   // Get references to the form fields
-  const nameField = document.querySelector('input[name="NAME"]');
-  // const ability1Field = document.querySelector('input[name="ABILITY1"]');
-  // const ability2Field = document.querySelector('input[name="ABILITY2"]');
-  // const ability3Field = document.querySelector('input[name="ABILITY3"]');
+  const nameField = document.getElementById(`updateInput${id}`);
+
   const authorField = document.querySelector('input[name="AUTHOR"]');
   const updateIdInput = document.querySelector('input[name="UPDATEID"]');
-  const button = document.getElementById('update-form');
-  // const imageInput = document.querySelector('input[name="IMAGE"]');
-  // const img = document.querySelector('.pokomon-image img');
+  const button = document.getElementById(`update-form${id}`);
+
 
   // Set the values of the form fields to the corresponding pokomon data
   nameField.value = name;
-  // ability1Field.value = ability1;
-  // ability2Field.value = ability2;
-  // ability3Field.value = ability3;
-  authorField.value = author;
+
+  // authorField.value = author;
   updateIdInput.value = id;
 
-
+  nameField.style.display = 'inline-block';
   button.style.display = 'inline-block';
 }
 
-async function updateForm() {
-  const nameField = document.querySelector('input[name="NAME"]').value;
-  // const ability1Field = document.querySelector('input[name="ABILITY1"]').value;
-  // const ability2Field = document.querySelector('input[name="ABILITY2"]').value;
-  // const ability3Field = document.querySelector('input[name="ABILITY3"]').value;
-  const authorField = document.querySelector('input[name="AUTHOR"]').value;
-  let updateId = document.querySelector('input[name="UPDATEID"]').value;
+async function updateForm(arrayNr, author) {
+  const nameField = document.getElementById(`updateInput${arrayNr}`).value;
 
-  const formData = new FormData();
+  const authorField = document.querySelector('input[name="AUTHOR"]').dataset.doc;
+  // console.log(arrayNr);
 
-  //form image value
-  // formData.append("image", form.IMAGE.files[0]);
 
-  //form values
-  // formData.append('yourWish', nameField);
-  // formData.append('ability1', ability1Field);
-  // formData.append('ability2', ability2Field);
-  // formData.append('ability3', ability3Field);
-  // formData.append('author', authorField);
 
   try {
-    const res = await fetch(`/update/${updateId}`,{
+    const res = await fetch(`/update/${arrayNr}`,{
         method: 'post',
-        body: JSON.stringify({yourWish: nameField, author: authorField}),
+        body: JSON.stringify({yourWish: nameField, author: author}),
         headers: {'Content-Type': 'application/json'}
     })
     location.reload();

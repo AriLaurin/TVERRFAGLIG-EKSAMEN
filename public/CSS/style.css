@@ -118,7 +118,7 @@ a:hover{
 
       .author-para{
         padding-right: 1em;
-        text-align: right;
+        text-align: center;
         font-family: Quicksand;
         font-size: 1.5em;
       }
@@ -219,4 +219,12 @@ a:hover{
         margin-top: 20px;
         margin-left: 10px;
         background-color: #EEE5E9;
+      }
+
+      #updateInput{
+        max-width: 90%;
+      }
+
+      .updateStyle{
+        display: none
       }

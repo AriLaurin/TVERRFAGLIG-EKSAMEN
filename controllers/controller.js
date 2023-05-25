@@ -72,10 +72,11 @@ module.exports.home_get = async (req,res) => { //a function that renders our rou
 
 module.exports.account_post = async (req, res) => {
         const { yourWish, author } = req.body;
-  
+
+        const update = {wishlist: yourWish}
+
         try {
-          const position = await Wish.countDocuments({ author }) + 1; // Get the count of existing wishes and increment by 1
-          product = await Wish.create({ yourWish, author, position });
+          product = await User.updateOne({email: author}, { $push: update})
           res.status(201);
           console.log("Wish created:", product);
           res.json(product);
@@ -111,8 +112,9 @@ module.exports.signup_post = async(req,res) => { //a function that renders our r
 module.exports.account_get = async (req,res) => { 
   const URLuser = req.params.user; //req.params is what we write into the url & using :user in the route, we can grab what we wrote
   // await Wish.find({author: URLuser}).populate("image").sort({ createdAt: -1}).limit(10)
-  await Wish.find({author: URLuser})
+  await User.find({email: URLuser})
   .then((result) => {
+      // console.log(result[0]);
       res.render('account', {title: 'All Wishes', wishes: result, URLuser})
   })
   .catch((err) => {
@@ -161,46 +163,57 @@ module.exports.user_get = async (req,res) => {
 
 }
 
-module.exports.Wish_delete = (req,res) => {
-  const ID = req.params.id;
-  Wish.findByIdAndDelete(ID)
-  .then(result => {
-    res.status(204).send();
-  })
-  .catch(err => {
-      console.log(err);
-  })
-}
+module.exports.Wish_delete = (req, res) => {
+  const arrayNr = req.params.id;
+  const author = req.body.author;
+
+  User.findOne({ email: author })
+    .then(user => {
+      if (user && user.wishlist[arrayNr]) {
+        // Remove the wishlist item at the specified index
+        user.wishlist.splice(arrayNr, 1);
+
+        // Save the updated user
+        return user.save();
+      } else {
+        throw new Error("Invalid index or user not found");
+      }
+    })
+    .then(updatedUser => {
+      console.log("Wish deleted:", updatedUser);
+      res.status(200).json(updatedUser);
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).send("Error deleting wish");
+    });
+};
+
 
 module.exports.Wish_update = (req, res) => {
-      const ID = req.params.updateId;
-      // const { name, ability1, ability2, ability3, author } = req.body;
-      const { yourWish, author } = req.body;
-      // let image = null;
-      // if (req.file) {
-      //   // process the image if it exists
-      //   image = new Image({
-      //     name: req.file.originalname,
-      //     data: req.file.buffer,
-      //     contentType: req.file.mimetype,
-      //     key: name,
-      //   });
-      // }
-      // const update = { name, ability1, ability2, ability3, author };
-      const update = { yourWish, author };
-      // if (image) {
-      //   update.image = image;
-      // }
-      Wish.findByIdAndUpdate(ID, update)
-        .then((result) => {
-          console.log('Updated Wish successfully');
-          res.status(204).send();
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500).send("Error updating Wish");
-        });
+  const arrayNr = req.params.updateId;
+  const yourWish = req.body.yourWish;
+  const author = req.body.author;
+
+  // Find the user based on the author's email
+  User.findOne({ email: author })
+    .then(user => {
+      // Update the wishlist item at the specified index
+      user.wishlist[arrayNr] = yourWish;
+
+      // Save the updated user
+      return user.save();
+    })
+    .then(updatedUser => {
+      console.log("Wish updated:", updatedUser);
+      res.status(201).json(updatedUser);
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).send("Error updating wish");
+    });
 };
+
 
 
 // Move a wish up
