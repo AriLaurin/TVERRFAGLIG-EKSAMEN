@@ -2,22 +2,21 @@
 
 
     <div class="center-body">
-
         <div class="all-Wishes">
 
             <%if(wishes.length > 0){%>
+                <h1 id="user-wishes">wishes by <%=wishes[0].email%></h1>
                 <%let counter = 1;%>
-                <h1 id="user-wishes">wishes by <%=wishes[0].author%></h1>
-                <%wishes.forEach(Wishes => {%>
-
-                    <div class="Wish-cont">
-                        <div class="Wish-content">
-                            <h1><%= counter %>. <%=Wishes.yourWish%></h1>
-                            <p class="author-para"><%=Wishes.author%></p>
+                <%wishes.forEach((Wishes) => {%> <!--If -->
+                     <% Wishes.wishlist.forEach((Wish) => { %> <!--For each wish in array, make new container and display info-->
+                        <div class="Wish-cont" id="wish-<%= counter - 1 %>">
+                            <div class="Wish-content" data-doc="<%=Wishes._id%>">
+                                <h1><%= counter %>. <%=Wish%></h1>
+                                <p class="author-para"><%=Wishes.email%></p>
+                            </div>
                         </div>
-        
-                    </div>
-                    <%counter++;%>
+                        <%counter++;%>
+                            <%})%>
                 <%})%>
               <%}else{%>
                 <div class="error-display">

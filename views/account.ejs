@@ -1,4 +1,54 @@
-<%- include('partials/header'); -%>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist</title>
+  <link rel="stylesheet" href="/CSS/style.css">
+
+  <!--FONTS-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Roboto:wght@100&family=Sedgwick+Ave+Display&family=Source+Code+Pro:ital,wght@1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Quicksand:wght@300;600&family=Roboto:wght@100&family=Sedgwick+Ave+Display&display=swap" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <div class="container">
+    <div class="top-body">
+      <div class="header-bar">
+        <% if (user){ %>
+          <a href="/">
+            <img src="/IMG/Wish_logo.png" id="header-img" alt="Website Logo of A Wishlist">
+          </a>
+          <% if (user){ %>
+              <h1>Wishlist - <%= user.email %></h1>
+            <% } else { %>
+              <a href="/">
+                <h1>Wishlist</h1>
+              </a>
+            <% } %>
+
+            <div class="right-links">
+              <a href="/guide">Guide</a>
+              <a href="/logout">log out</a>
+            </div>
+
+
+          <% } else { %>
+            <a href="/">
+              <img src="/IMG/Wish_logo.png" id="header-img" alt="Website Logo of A Wishlist">
+            </a>
+              <h1>Wishlist</h1>
+    
+            <div class="right-links">
+              <a href="/login">login</a>
+            </div>
+          <% } %>
+
+      </div>
+                                                                        
+    </div>
 
 
     <div class="center-body">
@@ -17,16 +67,20 @@
         <div class="all-Wishes">
             <%let counter = 1;%>
                     <%wishes.forEach((Wishes) => {%> <!--If -->
-                         <% Wishes.wishlist.forEach((Wish) => { %> <!--For each wish in array, make new container and display info-->
-                            <div class="Wish-cont" data-doc="<%= counter -1%>">
+                         <% Wishes.wishlist.forEach((Wish, index) => { %> <!--For each wish in array, make new container and display info-->
+                            <div class="Wish-cont" id="wish-<%= counter - 1 %>">
                                 <div class="Wish-content" data-doc="<%=Wishes._id%>" onclick="fillForm('<%=Wish%>', '<%= counter -1%>')">
                                     <button class ="delete" data-doc="<%=Wishes._id%>" onclick="deleteTRASH('<%= counter -1%>', '<%=Wishes.email%>')">DELETE</button>
                                     <h1><%= counter %>. <%=Wish%></h1>
                                     <input type="text" name="NAME" class="updateStyle" id="updateInput<%= counter -1%>">
                                     <button id="update-form<%= counter -1%>" class="updateStyle" type="button" onclick="updateForm('<%= counter -1%>', '<%=Wishes.email%>')">Update Wish</button>
                                     <p class="author-para"><%=Wishes.email%></p>
-                                    <button class="move-up" data-doc="<%= Wishes._id %>" onclick="moveWishUp('<%= Wishes._id %>')">Move Up</button>
-                                    <button class="move-down" data-doc="<%= Wishes._id %>" onclick="moveWishDown('<%= Wishes._id %>')">Move Down</button>
+                                    <% if (index > 0) { %>
+                                        <button class="move-up" onclick="moveWishUp('<%= Wishes._id %>', '<%= index %>', '<%= counter - 1 %>')">Move Up</button>
+                                      <% } %>
+                                      <% if (index < Wishes.wishlist.length - 1) { %>
+                                        <button class="move-down" onclick="moveWishDown('<%= Wishes._id %>', '<%= index %>', '<%= counter - 1 %>')">Move Down</button>
+                                      <% } %>
                                 </div>
                             </div>
                             <%counter++;%>

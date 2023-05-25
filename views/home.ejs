@@ -1,34 +1,36 @@
 <%- include('partials/header'); -%>
 
 
-    <div class="center-body">
+  <div class="center-body">
+    <h1 id="user-wishes">Check out these wishlists</h1>
+    <div class="all-Wishes">
 
-        <div class="all-Wishes">
+      <% if (Wish.length > 0) { %>
+        <% Wish.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)); %>
+        <% Wish.forEach((Wishes) => { %>
+          <div class="Wish-cont">
+              <a href="/<%= Wishes._id %>">
+              <div class="Wish-content" data-doc="<%= Wishes._id %>">
+                <h1><%= Wishes.wishlist[0] %></h1> <!-- Display the first wish in the wishlist array -->
+                <button id="update-form" class="updateStyle" type="button"></button>
+                <p class="author-para"><%= Wishes._id %></p> <!-- Display the email address -->
+              </div>
+            </a>
+            </div>
+        <% }) %>
+      <% } else { %>
+        <p>THERE'S NOTHING TO DISPLAY</p>
+      <% } %>
+      
+      
 
-            <% if (Wish.length > 0) {
-                // Sort the wishes by createdAt in descending order
-                Wish.sort((a, b) => new Date(b.document.createdAt) - new Date(a.document.createdAt));
-                Wish.forEach((Wishes) => { %>
-                  <div class="Wish-cont">
-                    <a href="/<%= Wishes.document.author %>">
-                      <div class="Wish-content">
-                        <h1><%= Wishes.document.yourWish %></h1>
-                        <p class="author-para"><%= Wishes.document.author %></p>
-                      </div>
-                    </a>
-                  </div>
-                <% });
-              } else { %>
-                <p>THERE'S NOTHING TO DISPLAY</p>
-              <% } %>
-              
-
-        </div>
-
-    </div>
-    <div class="bottom-body">
 
     </div>
+
+  </div>
+  <div class="bottom-body">
+
+  </div>
   </div>
 
-<%- include('partials/footer'); -%>
+  <%- include('partials/footer'); -%>

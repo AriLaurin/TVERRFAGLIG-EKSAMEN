@@ -16,19 +16,20 @@ router.post("/login", Controller.login_post);
 
 router.get("/logout", Controller.logout_get);
 
+router.get("/guide", requireAuth, Controller.guide_get);
+
+
 
 router.get("/home/:user", requireAuth, Controller.account_get);
 router.get("/:user", Controller.user_get);
+
 
 router.post("/update/:updateId", Controller.Wish_update);
 
 router.delete("/home/:id", Controller.Wish_delete);
 
-// Move a wish up
-router.post('/wishes/:id/move-up', Controller.moveWishUp);
-
-// Move a wish down
-// router.post('/wishes/:id/move-down', Controller.moveWishDown);
+// Move a wish 
+router.post('/:userId/move-wish', Controller.move_Wish);
 
 
 module.exports = router;

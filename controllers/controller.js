@@ -49,25 +49,25 @@ const createToken = (id) => {
 }
 
 module.exports.home_get = async (req,res) => { //a function that renders our routes from AuthRoutes
-  // .populate("image")
-  // await Wish.find().sort({ createdAt: -1}).limit(5)
-  await Wish.aggregate([
-    { $sort: { createdAt: -1 } }, // Sort by createdAt in ascending order
-      {
-        $group: {
-          _id: '$author', // Group by author field
-          document: { $first: '$$ROOT' } // Select the first document for each group
-        }
-      },
-      { $limit: 5 } // Limit the result to 5 documents (optional)
-  ])
-  .then((result) => {
-      res.render('home', {title: 'All Wishes', Wish: result})
-  })
-  .catch((err) => {
-    res.render("error");
-    console.log(err);
+await User.aggregate([
+  { $sort: { updatedAt: -1 } }, // Sort by createdAt in descending order
+  {
+    $group: {
+      _id: '$email', // Group by email field
+      wishlist: { $first: { $reverseArray: '$wishlist' } }, // Reverse the wishlist array and select the first wish
+      updatedAt: { $first: '$updatedAt' } // Select the first updatedAt value
+    }
+  },
+  { $limit: 5 } // Limit the result to 5 documents (optional)
+])
+.then((result) => {
+  // console.log(result);
+  res.render('home', { title: 'All Wishes', Wish: result })
 })
+.catch((err) => {
+  res.render("error");
+  console.log(err);
+});
 }
 
 module.exports.account_post = async (req, res) => {
@@ -111,10 +111,8 @@ module.exports.signup_post = async(req,res) => { //a function that renders our r
 
 module.exports.account_get = async (req,res) => { 
   const URLuser = req.params.user; //req.params is what we write into the url & using :user in the route, we can grab what we wrote
-  // await Wish.find({author: URLuser}).populate("image").sort({ createdAt: -1}).limit(10)
   await User.find({email: URLuser})
   .then((result) => {
-      // console.log(result[0]);
       res.render('account', {title: 'All Wishes', wishes: result, URLuser})
   })
   .catch((err) => {
@@ -152,15 +150,20 @@ module.exports.logout_get = (req,res) => {
 }
 
 module.exports.user_get = async (req,res) => {
-  const user = req.params.user; //req.params is what we write into the url & using :user in the route, we can grab what we wrote
-  await Wish.find({author: user}).sort({ createdAt: -1})
+  const URLuser = req.params.user; //req.params is what we write into the url & using :user in the route, we can grab what we wrote
+  await User.find({email: URLuser})
   .then((result) => {
-      res.render('user', {title: 'All Wishes', wishes: result})
+      res.render('user', {title: 'All Wishes', wishes: result, URLuser})
   })
   .catch((err) => {
-    res.render("error", {title: "Pokos not found"});
+    res.render("error");
+    console.log(err);
 })
 
+}
+
+module.exports.guide_get = async (req,res) => {
+  res.render("guide");
 }
 
 module.exports.Wish_delete = (req, res) => {
@@ -171,7 +174,7 @@ module.exports.Wish_delete = (req, res) => {
     .then(user => {
       if (user && user.wishlist[arrayNr]) {
         // Remove the wishlist item at the specified index
-        user.wishlist.splice(arrayNr, 1);
+        user.wishlist.splice(arrayNr, 1); //para 1 is what index and para 2 is how many elements to delete
 
         // Save the updated user
         return user.save();
@@ -216,40 +219,29 @@ module.exports.Wish_update = (req, res) => {
 
 
 
-// Move a wish up
-module.exports.moveWishUp = async (req, res) => {
-  const wishId = req.params.id;
+module.exports.move_Wish = async (req, res) => {
+const userId = req.params.userId;
+  const { currentIndex, newIndex } = req.body;
 
   try {
-    const wish = await Wish.findById(wishId);
-    console.log("1",  wish.createdAt);
+    const user = await User.findById(userId);
+    const wishlist = user.wishlist;
 
-    if (!wish) {
-      return res.status(404).json({ error: 'Wish not found' });
+    // Validate currentIndex and newIndex
+    if (currentIndex < 0 || currentIndex >= wishlist.length || newIndex < 0 || newIndex >= wishlist.length) {
+      return res.status(400).json({ error: 'Invalid currentIndex or newIndex' });
     }
 
-    const previousWish = await Wish.findOne({
-      author: wish.author,
-      _id: { $ne: wishId },
-      createdAt: { $lt: wish.createdAt },
-    }).sort({ createdAt: -1 });
+    // Move the wish in the wishlist array
+    const movedWish = wishlist.splice(currentIndex, 1)[0];
+    wishlist.splice(newIndex, 0, movedWish);
 
-    if (previousWish) {
-      const tempCreatedAt = wish.createdAt;
-      console.log("prev wish", previousWish.createdAt);
-      wish.createdAt = previousWish.createdAt;
-      previousWish.createdAt = tempCreatedAt;
-      console.log("2", wish.createdAt);
+    // Save the updated user document
+    await user.save();
 
-      await wish.save();
-      await previousWish.save();
-
-      return res.status(200).json({ message: 'Wish moved up successfully' });
-    }
-
-    return res.status(400).json({ error: 'Cannot move wish up' });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: 'Internal server error' });
+    res.json({ message: 'Wish moved successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while moving the wish' });
   }
-};
+}

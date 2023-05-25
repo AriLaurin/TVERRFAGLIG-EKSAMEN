@@ -1,25 +1,66 @@
 const form = document.querySelector("form");
 const formButton = document.querySelector("#formsubmit");
 
-async function moveWishUp(wishId){
+function moveWishUp(userId, currentIndex, counter) {
+  const wishContainer = document.getElementById(`wish-${counter}`);
+  const prevWishContainer = document.getElementById(`wish-${counter - 1}`);
+  console.log(wishContainer, prevWishContainer);
+  const currentWish = wishContainer.innerHTML;
+  const prevWish = prevWishContainer.innerHTML;
 
-  try {
-    //sender data som lager bruker
-    const res = await fetch(`/wishes/${wishId}/move-up`,{
-        method: 'post',
-        headers: {'Content-Type': 'application/json'}
+  // Swap the wish containers
+  wishContainer.innerHTML = prevWish;
+  prevWishContainer.innerHTML = currentWish;
+
+  // Make an AJAX request to update the wish order on the server-side
+  fetch(`/${userId}/move-wish`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      currentIndex,
+      newIndex: currentIndex - 1,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Wish moved up:', data);
     })
-    const pokoData = await res.json();
-       
-    // console.log(pokoData);
-    location.reload();
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
 
-} catch (err) {
-    console.log(err)
-    const message = await err.text();
-    console.log('error message:', message);
+function moveWishDown(userId, currentIndex, counter) {
+  const wishContainer = document.getElementById(`wish-${counter}`);
+  const nextWishContainer = document.getElementById(`wish-${++counter}`);
+  console.log(wishContainer, nextWishContainer);
+  const currentWish = wishContainer.innerHTML;
+  const nextWish = nextWishContainer.innerHTML;
+
+  // Swap the wish containers
+  wishContainer.innerHTML = nextWish;
+  nextWishContainer.innerHTML = currentWish;
+
+  // Make an AJAX request to update the wish order on the server-side
+  fetch(`/${userId}/move-wish`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      currentIndex, newIndex: ++currentIndex}),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Wish moved down:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 }
-}
+
 
 async function formPOST(){
   const NAME = form.NAME.value

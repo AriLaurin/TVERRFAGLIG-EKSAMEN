@@ -228,3 +228,21 @@ a:hover{
       .updateStyle{
         display: none
       }
+
+.info-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.guide-img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+.Wish-User{
+  color:#383D3B;
+}

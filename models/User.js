@@ -20,8 +20,8 @@ const userSchema = new mongoose.Schema({//object defines the structure of our us
 
     wishlist:{
         type: Array
-    }
-});
+    },
+}, {timestamps: true});
 
 //fire a function after doc saved to db
 userSchema.post("save", function (doc, next){ //.post refers to after a save has been made, do something
@@ -32,8 +32,13 @@ userSchema.post("save", function (doc, next){ //.post refers to after a save has
 
 // fire a function before doc saved to db
 userSchema.pre("save", async function (next){ //.pre refers to before something happens, do something
+    if (!this.isModified("password")) {
+        return next();
+      }
+      
     const salt = await bcrypt.genSalt(); //genSalt is async
     this.password = await bcrypt.hash(this.password, salt);//this. refers to the current user being created
+    console.log(this.password);
             //turn the password into hash through has algorithm, and add salt
    // console.log("user about to be created and saved", this); //this refers to the user object that is created and saved before its actually sent to the db, which is why we want to use a normal function as well
     next();
@@ -45,6 +50,7 @@ userSchema.statics.login = async function (email,password) { //we create a stati
 
     if(user){ //if user exists, do something
         const auth = await bcrypt.compare(password, user.password) //first para is the password the user logs in with, the second para is the hashed password stored in db
+        // console.log(password, user.password);
             //store the value in a const
 
             if(auth){ //if auth gets a true value from compare, do this
