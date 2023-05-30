@@ -1,11 +1,5 @@
-const Wish = require("../models/Wish");
 const User = require("../models/User");
-const Image = require("../models/Image");
 const jwt = require("jsonwebtoken");
-const multer = require('multer');
-
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage }).single('image');
 
 //handle errors
 const handleErrors = (err) => {
@@ -233,7 +227,7 @@ const userId = req.params.userId;
     }
 
     // Move the wish in the wishlist array
-    const movedWish = wishlist.splice(currentIndex, 1)[0];
+    const movedWish = wishlist.splice(currentIndex, 1)[0]; //para 1 is what index and para 2 is how many elements to delete
     wishlist.splice(newIndex, 0, movedWish);
 
     // Save the updated user document

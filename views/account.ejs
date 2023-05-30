@@ -57,7 +57,7 @@
                 <h1 class="form-title">MAKE A WISH</h1>
               <form>
                 <label for="NAME">ADD YOUR WISH</label>
-                <input type="text" name="NAME">
+                <input type="text" name="NAME" id="NAME">
                 <input type="hidden" name="AUTHOR" data-doc="<%=user.email%>">
                 <input type="hidden" name="UPDATEID" value="">
                 <button id="formsubmit" type="button">Make a Wish</button>
@@ -66,7 +66,7 @@
 
         <div class="all-Wishes">
             <%let counter = 1;%>
-                    <%wishes.forEach((Wishes) => {%> <!--If -->
+                    <%wishes.forEach((Wishes) => {%> <!--Loops through user so we can display information from the user as well-->
                          <% Wishes.wishlist.forEach((Wish, index) => { %> <!--For each wish in array, make new container and display info-->
                             <div class="Wish-cont" id="wish-<%= counter - 1 %>">
                                 <div class="Wish-content" data-doc="<%=Wishes._id%>" onclick="fillForm('<%=Wish%>', '<%= counter -1%>')">
@@ -88,7 +88,7 @@
                     <%})%>
             <%}else{%>
                 <div class="error-display">
-                    <p id="no-display">PERMISSION DENIED</p>
+                    <h2 id="no-display">PERMISSION DENIED</h2>
                 </div>
               <%}%>
            

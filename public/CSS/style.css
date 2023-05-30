@@ -5,6 +5,7 @@ h1, h2, h3, p, a ,label, li, footer, div {
 
 body{
     background-color: #EEE5E9;
+
 }
 
 a{
@@ -199,7 +200,7 @@ a:hover{
 
       #no-display{
         text-align: center;
-        color: #A2AD91;
+        color: #383D3B;
         font-size: 2em;
       }
 

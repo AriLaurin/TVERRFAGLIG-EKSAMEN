@@ -36,7 +36,6 @@
         //get values of email and pass
         const email = form.email.value
         const password = form.password.value //these are the name="", values
-        //console.log(email, password);
 
         try {
             const result = await fetch("/signup", {//endpoint we want to request to, options object

@@ -50,7 +50,6 @@ userSchema.statics.login = async function (email,password) { //we create a stati
 
     if(user){ //if user exists, do something
         const auth = await bcrypt.compare(password, user.password) //first para is the password the user logs in with, the second para is the hashed password stored in db
-        // console.log(password, user.password);
             //store the value in a const
 
             if(auth){ //if auth gets a true value from compare, do this

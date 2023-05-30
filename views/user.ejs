@@ -7,7 +7,7 @@
             <%if(wishes.length > 0){%>
                 <h1 id="user-wishes">wishes by <%=wishes[0].email%></h1>
                 <%let counter = 1;%>
-                <%wishes.forEach((Wishes) => {%> <!--If -->
+                <%wishes.forEach((Wishes) => {%> <!--This loops through the entire user document so we can use parameters like email -->
                      <% Wishes.wishlist.forEach((Wish) => { %> <!--For each wish in array, make new container and display info-->
                         <div class="Wish-cont" id="wish-<%= counter - 1 %>">
                             <div class="Wish-content" data-doc="<%=Wishes._id%>">

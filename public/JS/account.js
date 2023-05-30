@@ -4,7 +4,6 @@ const formButton = document.querySelector("#formsubmit");
 function moveWishUp(userId, currentIndex, counter) {
   const wishContainer = document.getElementById(`wish-${counter}`);
   const prevWishContainer = document.getElementById(`wish-${counter - 1}`);
-  console.log(wishContainer, prevWishContainer);
   const currentWish = wishContainer.innerHTML;
   const prevWish = prevWishContainer.innerHTML;
 
@@ -12,7 +11,7 @@ function moveWishUp(userId, currentIndex, counter) {
   wishContainer.innerHTML = prevWish;
   prevWishContainer.innerHTML = currentWish;
 
-  // Make an AJAX request to update the wish order on the server-side
+  // Make a POST request to update the wish order on the server-side
   fetch(`/${userId}/move-wish`, {
     method: 'POST',
     headers: {
@@ -46,7 +45,7 @@ function moveWishDown(userId, currentIndex, counter) {
   wishContainer.innerHTML = nextWish;
   nextWishContainer.innerHTML = currentWish;
 
-  // Make an AJAX request to update the wish order on the server-side
+  // Make a POST request to update the wish order on the server-side
   fetch(`/${userId}/move-wish`, {
     method: 'POST',
     headers: {
@@ -80,13 +79,11 @@ async function formPOST(){
     //sender data som lager bruker
     const res = await fetch('/account',{
         method: 'post',
-        // body: formData,
         body: JSON.stringify({yourWish: NAME, author: AUTHOR}),
         headers: {'Content-Type': 'application/json'}
     })
     const pokoData = await res.json();
        
-    // console.log(pokoData);
     location.reload();
 
 } catch (err) {
@@ -126,12 +123,10 @@ function deleteTRASH(arrayNr, author) {
   .then(() => {
     location.reload();
   })
-  // .then(data => window.location.href = data.redirect)
   .catch(err => console.log(err));
 }
 
   function fillForm(name, id) {
-    // console.log(name, author, id);
   // Get references to the form fields
   const nameField = document.getElementById(`updateInput${id}`);
 
@@ -142,8 +137,6 @@ function deleteTRASH(arrayNr, author) {
 
   // Set the values of the form fields to the corresponding pokomon data
   nameField.value = name;
-
-  // authorField.value = author;
   updateIdInput.value = id;
 
   nameField.style.display = 'inline-block';
@@ -152,10 +145,6 @@ function deleteTRASH(arrayNr, author) {
 
 async function updateForm(arrayNr, author) {
   const nameField = document.getElementById(`updateInput${arrayNr}`).value;
-
-  const authorField = document.querySelector('input[name="AUTHOR"]').dataset.doc;
-  // console.log(arrayNr);
-
 
 
   try {
